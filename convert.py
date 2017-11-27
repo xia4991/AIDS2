@@ -23,12 +23,16 @@ def test_sentence(sentence):
 
 
 def convert(sentence):
-	print (sentence)
-	if test_sentence(sentence[0]) == 0:
+	sentence_list = []
+	if test_sentence(sentence[0]) == 0:						#veifica se o sentence e atom
 		return sentence
 	elif test_sentence(sentence[0]) == 1:
-		convert(sentence[1])
-		return 
+		if test_sentence(sentence[1][0]) == 0:					#verifica se o sentence é not atom
+			return sentence
+		elif sentence[1][0] == 'and':
+			new_sentence = ('not', sentence[1][1])
+			sentence_list.extend(convert(sentence[1]))
+			return sentence_list
 	elif test_sentence(sentence[0]) == 2:
 		return
 	elif test_sentence(sentence[0]) == 3:
@@ -48,20 +52,21 @@ def main():
 	negation = ('not', 'A')
 	conjunciton = ('and', 'A' , 'B')
 	disjunction = ('or', 'A' , 'B')
-	
 	implication = ('=>', 'A' , 'B')
 	equivalence = ('<=>', 'A' , 'B')
+
 	tuple_list.append(negation)
 	tuple_list.append(conjunciton)
 	tuple_list.append(disjunction)
 	tuple_list.append(implication)
 	tuple_list.append(equivalence)
-	tuple_list.append(('or', '('and', 'A' , 'B')', '('and', 'C' , 'B')'))
+	tuple_list.append(('not', ('and', 'A' , 'B')))
+	tuple_list.append(('or', ('and', 'A' , 'B'), ('and', 'C' , 'B')))
+	tuple_list.append(('not',('or', ('and', 'A' , 'B'), ('and', 'C' , 'B'))))
 	
-	print (tuple_list)
-	print (test_sentence("A"))
+	#print (tuple_list)
 
-	convert(tuple_list[6])
+	print (convert(tuple_list[5]))
 
 
 
